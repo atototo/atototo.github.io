@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이영은 | 백엔드 개발자 포트폴리오</title>
+    <meta name="description" content="Java/Spring 백엔드 6년차. 카카오, SM엔터테인먼트 등 엔터프라이즈 시스템에서 운영 효율화, 아키텍처 개선으로 측정 가능한 성과를 만들어온 개발자.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: rgba(255,255,255,0.05);
+            --bg-tertiary: rgba(255,255,255,0.02);
+            --text-primary: #f5f5f5;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --orange-500: #f97316;
+            --emerald-400: #34d399;
+            --emerald-500: #10b981;
+            --red-400: #f87171;
+            --blue-400: #60a5fa;
+            --purple-400: #a78bfa;
+            --cyan-400: #22d3ee;
+            --border-color: rgba(255,255,255,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background Effects */
+        .bg-effects {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-effects::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: 20%;
+            width: 500px;
+            height: 500px;
+            background: rgba(251, 191, 36, 0.06);
+            border-radius: 50%;
+            filter: blur(120px);
+        }
+
+        .bg-effects::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: 15%;
+            width: 400px;
+            height: 400px;
+            background: rgba(249, 115, 22, 0.06);
+            border-radius: 50%;
+            filter: blur(120px);
+        }
+
+        .grid-pattern {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--amber-400), var(--orange-500));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: black;
+        }
+
+        .logo-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--amber-400);
+        }
+
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        section {
+            padding: 6rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(52, 211, 153, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 9999px;
+            color: var(--emerald-400);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--emerald-400);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, #fde68a, #fdba74, var(--amber-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-role {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-role .tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--amber-400);
+        }
+
+        .hero-intro {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .hero-desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 640px) {
+            .hero-stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-item {
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--amber-400);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, var(--amber-500), var(--orange-500));
+            color: black;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 10px 40px rgba(251, 191, 36, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-weight: 500;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--amber-400);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-visual {
+                display: block;
+                position: relative;
+            }
+        }
+
+        .visual-card {
+            background: linear-gradient(135deg, var(--bg-secondary), rgba(251, 191, 36, 0.05));
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visual-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--amber-400), var(--orange-500));
+        }
+
+        .visual-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .visual-code {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .code-comment { color: var(--text-muted); }
+        .code-keyword { color: var(--purple-400); }
+        .code-string { color: var(--emerald-400); }
+        .code-function { color: var(--amber-400); }
+        .code-variable { color: var(--blue-400); }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-header h2 .muted {
+            color: var(--text-muted);
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Projects Section */
+        .projects-bg {
+            background: linear-gradient(180deg, transparent, var(--bg-tertiary), transparent);
+        }
+
+        .projects-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .project-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            border-color: var(--amber-400);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .project-header {
+            padding: 1.5rem 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .project-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .project-icon.azak {
+            background: linear-gradient(135deg, var(--amber-400), var(--orange-500));
+            color: black;
+        }
+
+        .project-icon.mcp {
+            background: linear-gradient(135deg, var(--purple-400), var(--blue-400));
+            color: white;
+        }
+
+        .project-icon.play {
+            background: linear-gradient(135deg, var(--emerald-400), var(--cyan-400));
+            color: black;
+        }
+
+        .project-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-official {
+            background: rgba(167, 139, 250, 0.2);
+            color: var(--purple-400);
+        }
+
+        .badge-live {
+            background: rgba(52, 211, 153, 0.2);
+            color: var(--emerald-400);
+        }
+
+        .badge-featured {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--amber-400);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .project-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-tag {
+            padding: 0.375rem 0.75rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .project-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .project-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--amber-400);
+        }
+
+        /* Experience Section */
+        .experience-timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .experience-item {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.2s;
+        }
+
+        @media (min-width: 768px) {
+            .experience-item {
+                grid-template-columns: 200px 1fr;
+            }
+        }
+
+        .experience-item:hover {
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .exp-company {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .exp-logo {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--amber-400);
+        }
+
+        .exp-company-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .exp-company-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .exp-period {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .exp-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .exp-achievements {
+            list-style: none;
+        }
+
+        .exp-achievements li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .exp-achievements li i {
+            color: var(--emerald-400);
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        /* Skills Section */
+        .skills-bg {
+            background: linear-gradient(180deg, transparent, var(--bg-tertiary), transparent);
+        }
+
+        .skills-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .skills-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .skill-card {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+        }
+
+        .skill-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            padding: 0.375rem 0.75rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Contact Section */
+        .contact-card {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--bg-secondary), rgba(251, 191, 36, 0.05));
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            text-align: center;
+        }
+
+        .contact-card h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .contact-link:hover {
+            border-color: var(--amber-400);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--amber-400);
+        }
+
+        .footer-copy {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile menu */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-effects"></div>
+    <div class="grid-pattern"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">Y</div>
+                <span class="logo-text">이영은</span>
+            </a>
+            <div class="nav-links">
+                <a href="#projects">프로젝트</a>
+                <a href="#experience">경력</a>
+                <a href="#skills">기술</a>
+                <a href="https://github.com/atototo" target="_blank" class="nav-btn">
+                    <i data-lucide="github" style="width: 16px; height: 16px;"></i>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="hero-badge">
+                            <span class="dot"></span>
+                            Open to Work
+                        </div>
+                        
+                        <h1>
+                            안녕하세요,<br>
+                            <span class="gradient">이영은</span>입니다
+                        </h1>
+                        
+                        <div class="hero-role">
+                            백엔드 개발자
+                            <span class="tag">Java/Spring 6년차</span>
+                        </div>
+
+                        <p class="hero-intro">
+                            불편하면 직접 만들고,<br>
+                            효과가 있으면 팀에 공유하는 개발자입니다.
+                        </p>
+                        
+                        <p class="hero-desc">
+                            카카오, SM엔터테인먼트 등 엔터프라이즈 시스템에서 운영 효율화, 아키텍처 개선, 
+                            무중단 배포 체계 구축으로 측정 가능한 성과를 만들어왔습니다.
+                            최근에는 MCP 서버 개발로 Anthropic 공식 레지스트리 등록,
+                            AI 도구 개발 역량을 확장 중입니다.
+                        </p>
+
+                        <div class="hero-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">77%</div>
+                                <div class="stat-label">운영 리소스 절감</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">40h→1h</div>
+                                <div class="stat-label">DR 복구 시간</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">10+</div>
+                                <div class="stat-label">팀 도구 확산</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">공식</div>
+                                <div class="stat-label">Anthropic MCP</div>
+                            </div>
+                        </div>
+
+                        <div class="hero-buttons">
+                            <a href="#projects" class="btn-primary">
+                                <i data-lucide="folder-open" style="width: 18px; height: 18px;"></i>
+                                프로젝트 보기
+                            </a>
+                            <a href="mailto:atoto0311@gmail.com" class="btn-secondary">
+                                <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
+                                연락하기
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="hero-visual">
+                        <div class="visual-card">
+                            <div class="visual-header">
+                                <i data-lucide="terminal" style="width: 16px; height: 16px;"></i>
+                                developer.java
+                            </div>
+                            <div class="visual-code">
+                                <span class="code-keyword">public class</span> <span class="code-function">Developer</span> {<br>
+                                &nbsp;&nbsp;<span class="code-keyword">private</span> String motto = <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"불편하면 직접 만든다"</span>;<br><br>
+                                &nbsp;&nbsp;<span class="code-keyword">public void</span> <span class="code-function">solve</span>(Problem p) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-variable">Tool</span> tool = <span class="code-function">build</span>(p);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (tool.<span class="code-function">isEffective</span>()) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-function">document</span>(tool);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-function">shareWithTeam</span>(tool);<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;}<br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects-bg fade-in">
+            <div class="container">
+                <div class="section-header">
+                    <h2><span class="muted">사이드</span> 프로젝트</h2>
+                    <p>직접 기획하고 개발한 개인 프로젝트들</p>
+                </div>
+
+                <div class="projects-grid">
+                    <!-- Azak Project -->
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-icon azak">A</div>
+                            <span class="project-badge badge-live">Live</span>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Azak (아작)</h3>
+                            <p class="project-subtitle">AI 주식 분석 플랫폼 • 2025.10 ~ 현재</p>
+                            <p class="project-desc">
+                                로컬 임베딩 모델(KoSimCSE) 기반 유사 뉴스 검색 + LLM 멀티모델 A/B 테스트 주가 예측 시스템.
+                                3주간 10,000건+ 리포트 자동 생성.
+                            </p>
+                            <div class="project-highlights">
+                                <span class="highlight-tag">FastAPI</span>
+                                <span class="highlight-tag">Next.js 15</span>
+                                <span class="highlight-tag">FAISS</span>
+                                <span class="highlight-tag">OpenRouter</span>
+                                <span class="highlight-tag">Supabase</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://azak.ngrok.app" target="_blank" class="project-link">
+                                    <i data-lucide="globe" style="width: 16px; height: 16px;"></i>
+                                    Live Demo
+                                </a>
+                                <a href="https://github.com/atototo/azak-ting" target="_blank" class="project-link">
+                                    <i data-lucide="github" style="width: 16px; height: 16px;"></i>
+                                    GitHub
+                                </a>
+                                <a href="./projects/azak.html" class="project-link">
+                                    <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
+                                    상세보기
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- api-lab-mcp Project -->
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-icon mcp">M</div>
+                            <span class="project-badge badge-official">Anthropic 공식</span>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">api-lab-mcp</h3>
+                            <p class="project-subtitle">API 테스팅 MCP 서버 • 2025.09 (3일)</p>
+                            <p class="project-desc">
+                                AI 연동 API 테스팅 MCP 서버. 14개 MCP Tools 구현, 
+                                Anthropic MCP 공식 레지스트리 커뮤니티 서버 등록 (PR #2737 머지), NPM 배포.
+                            </p>
+                            <div class="project-highlights">
+                                <span class="highlight-tag">TypeScript</span>
+                                <span class="highlight-tag">MCP SDK</span>
+                                <span class="highlight-tag">Zod</span>
+                                <span class="highlight-tag">Swagger Parser</span>
+                                <span class="highlight-tag">NPM</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/modelcontextprotocol/servers/pull/2737" target="_blank" class="project-link">
+                                    <i data-lucide="git-pull-request" style="width: 16px; height: 16px;"></i>
+                                    PR #2737
+                                </a>
+                                <a href="https://github.com/atototo/api-lab-mcp" target="_blank" class="project-link">
+                                    <i data-lucide="github" style="width: 16px; height: 16px;"></i>
+                                    GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PlayMCP Project -->
+                    <div class="project-card" style="grid-column: span 1;">
+                        <div class="project-header">
+                            <div class="project-icon play">P</div>
+                            <span class="project-badge badge-featured">"추천" 배지</span>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">PlayMCP 서버 4종</h3>
+                            <p class="project-subtitle">카카오 PlayMCP 플랫폼 • 2025.10 ~ 11</p>
+                            <p class="project-desc">
+                                카카오 PlayMCP 플랫폼 등록용 MCP 서버 4종 기획부터 배포까지 단독 진행.
+                                의료정보 MCP "추천" 배지 획득 (상위 10%), 총 26개 MCP 도구 개발.
+                            </p>
+                            <div class="project-highlights">
+                                <span class="highlight-tag">우주정보 MCP</span>
+                                <span class="highlight-tag">재난정보 MCP</span>
+                                <span class="highlight-tag">의료정보 MCP</span>
+                                <span class="highlight-tag">OX퀴즈 MCP</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#" class="project-link" style="opacity: 0.5; pointer-events: none;">
+                                    <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
+                                    회사 프로젝트
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="fade-in">
+            <div class="container">
+                <div class="section-header">
+                    <h2><span class="muted">Work</span> Experience</h2>
+                    <p>개발 경력 5년 4개월 / 총 경력 8년</p>
+                </div>
+
+                <div class="experience-timeline">
+                    <!-- DK Techin -->
+                    <div class="experience-item">
+                        <div class="exp-company">
+                            <div class="exp-logo">dk</div>
+                            <div class="exp-company-name">디케이테크인</div>
+                            <div class="exp-company-sub">a kakao company</div>
+                            <div class="exp-period">2022.03 ~ 현재</div>
+                        </div>
+                        <div class="exp-content">
+                            <h3>백엔드 개발 및 시스템 아키텍처 설계</h3>
+                            <ul class="exp-achievements">
+                                <li>
+                                    <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                                    PlayMCP 플랫폼 4개 프로젝트 정식 등록, "추천" 배지 획득
+                                </li>
+                                <li>
+                                    <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                                    멀티테넌시 전환으로 조직도 동기화 5분+ → 1분 이내 개선
+                                </li>
+                                <li>
+                                    <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                                    Blue/Green 무중단 배포 체계 구축, 장애 0건
+                                </li>
+                                <li>
+                                    <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                                    구매입찰시스템 DR 환경 구축 (복구 40h→1h), 운영 리소스 77% 절감
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Crizen -->
+                    <div class="experience-item">
+                        <div class="exp-company">
+                            <div class="exp-logo">C</div>
+                            <div class="exp-company-name">크리젠솔루션</div>
+                            <div class="exp-company-sub">금융 SI</div>
+                            <div class="exp-period">2019.08 ~ 2022.02</div>
+                        </div>
+                        <div class="exp-content">
+                            <h3>금융권 여신시스템 개발</h3>
+                            <ul class="exp-achievements">
+                                <li>
+                                    <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                                    부동산시세조회 SaaS 서비스 개발
+                                </li>
+                                <li>
+                                    <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                                    대한/OSB/페퍼저축은행 여신시스템 개발 및 유지보수
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Amore Pacific -->
+                    <div class="experience-item">
+                        <div class="exp-company">
+                            <div class="exp-logo">A</div>
+                            <div class="exp-company-name">아모레퍼시픽</div>
+                            <div class="exp-company-sub">백화점 영업</div>
+                            <div class="exp-period">2014.09 ~ 2018.03</div>
+                        </div>
+                        <div class="exp-content">
+                            <h3>백화점 브랜드 영업 및 마케팅</h3>
+                            <ul class="exp-achievements">
+                                <li>
+                                    <i data-lucide="trophy" style="width: 16px; height: 16px; color: var(--amber-400);"></i>
+                                    2017년 브랜드 영업 성장률 전국 1위, 우수사원(엔젤 오브 더 이어) 수상
+                                </li>
+                                <li>
+                                    <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                                    외국인 고객 영업 최초 담당, 뉴욕 명품 백화점 프로모션 기획
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="skills-bg fade-in">
+            <div class="container">
+                <div class="section-header">
+                    <h2><span class="muted">Tech</span> Stack</h2>
+                    <p>주로 사용하는 기술들</p>
+                </div>
+
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h3>
+                            <i data-lucide="server" style="width: 18px; height: 18px; color: var(--blue-400);"></i>
+                            Backend
+                        </h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Java</span>
+                            <span class="skill-tag">Spring Boot</span>
+                            <span class="skill-tag">JPA</span>
+                            <span class="skill-tag">QueryDSL</span>
+                            <span class="skill-tag">MyBatis</span>
+                            <span class="skill-tag">Spring Batch</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-card">
+                        <h3>
+                            <i data-lucide="database" style="width: 18px; height: 18px; color: var(--emerald-400);"></i>
+                            Database
+                        </h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">MySQL</span>
+                            <span class="skill-tag">PostgreSQL</span>
+                            <span class="skill-tag">Redis</span>
+                            <span class="skill-tag">Supabase</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-card">
+                        <h3>
+                            <i data-lucide="cloud" style="width: 18px; height: 18px; color: var(--purple-400);"></i>
+                            DevOps
+                        </h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Docker</span>
+                            <span class="skill-tag">Kubernetes</span>
+                            <span class="skill-tag">ArgoCD</span>
+                            <span class="skill-tag">GitHub Actions</span>
+                            <span class="skill-tag">Flyway</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-card">
+                        <h3>
+                            <i data-lucide="brain" style="width: 18px; height: 18px; color: var(--amber-400);"></i>
+                            AI / ML
+                        </h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">OpenAI API</span>
+                            <span class="skill-tag">OpenRouter</span>
+                            <span class="skill-tag">MCP SDK</span>
+                            <span class="skill-tag">FAISS</span>
+                            <span class="skill-tag">HuggingFace</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="fade-in">
+            <div class="container">
+                <div class="contact-card">
+                    <h2>함께 일해보실래요?</h2>
+                    <p>
+                        새로운 도전과 기회에 열려있습니다.<br>
+                        편하게 연락주세요!
+                    </p>
+                    <div class="contact-links">
+                        <a href="mailto:atoto0311@gmail.com" class="contact-link">
+                            <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
+                            atoto0311@gmail.com
+                        </a>
+                        <a href="https://github.com/atototo" target="_blank" class="contact-link">
+                            <i data-lucide="github" style="width: 18px; height: 18px;"></i>
+                            github.com/atototo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/atototo" target="_blank">
+                    <i data-lucide="github" style="width: 20px; height: 20px;"></i>
+                </a>
+                <a href="mailto:atoto0311@gmail.com">
+                    <i data-lucide="mail" style="width: 20px; height: 20px;"></i>
+                </a>
+            </div>
+            <p class="footer-copy">
+                © 2025 이영은. Built with ☕ and passion.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
