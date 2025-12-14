@@ -542,8 +542,7 @@
                 <a href="#search">검색</a>
                 <a href="#tech">기술</a>
                 <a href="https://mine-fan.ngrok.app/admin" target="_blank" class="nav-btn">
-                    <i data-lucide="external-link"></i>
-                    Live Demo
+                    🔗 Live Demo
                 </a>
             </div>
         </div>
@@ -585,12 +584,10 @@
 
                     <div class="hero-buttons">
                         <a href="https://mine-fan.ngrok.app/admin" target="_blank" class="btn-primary">
-                            <i data-lucide="play"></i>
-                            Live Demo
+                            ▶️ Live Demo
                         </a>
                         <a href="#architecture" class="btn-secondary">
-                            <i data-lucide="layers"></i>
-                            아키텍처 보기
+                            📐 아키텍처 보기
                         </a>
                     </div>
                 </div>
@@ -601,69 +598,98 @@
         <section id="architecture" class="fade-in">
             <div class="container">
                 <div class="section-header">
-                    <h2><span class="muted">2-Tier</span> 분산 아키텍처</h2>
+                    <h2><span class="muted">3-Tier</span> 분산 아키텍처</h2>
                     <p>하드웨어 특성에 맞춘 분산 구조 — 클라우드 API 비용 0원</p>
                 </div>
 
-                <div class="arch-grid">
-                    <div class="arch-card api">
-                        <h3>
-                            <i data-lucide="server" style="width:24px;height:24px;color:var(--cyan-400);"></i>
-                            API Server
-                        </h3>
-                        <div class="subtitle">Mac M1 · Port 9000</div>
-                        <ul class="arch-list">
-                            <li>
-                                <div class="icon">🚀</div>
-                                <div class="name">FastAPI</div>
-                                <div class="desc">REST API</div>
-                            </li>
-                            <li>
-                                <div class="icon">🗄️</div>
-                                <div class="name">SQLite + SQLAlchemy</div>
-                                <div class="desc">데이터 저장</div>
-                            </li>
-                            <li>
-                                <div class="icon">🔍</div>
-                                <div class="name">FAISS</div>
-                                <div class="desc">벡터 검색</div>
-                            </li>
-                            <li>
-                                <div class="icon">⚙️</div>
-                                <div class="name">비즈니스 로직</div>
-                                <div class="desc">검색/클러스터링</div>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="arch-grid" style="grid-template-columns: 1fr;">
+                    <div style="display: grid; gap: 1.5rem;">
+                        <!-- Frontend -->
+                        <div class="arch-card" style="border-top: 3px solid var(--emerald-400);">
+                            <h3>
+                                🖥️ Frontend
+                            </h3>
+                            <div class="subtitle">Next.js 16 · Port 3000</div>
+                            <ul class="arch-list">
+                                <li>
+                                    <div class="icon">⚛️</div>
+                                    <div class="name">React 19 + TypeScript</div>
+                                    <div class="desc">UI</div>
+                                </li>
+                                <li>
+                                    <div class="icon">🎬</div>
+                                    <div class="name">HLS.js</div>
+                                    <div class="desc">영상 스트리밍</div>
+                                </li>
+                                <li>
+                                    <div class="icon">🎨</div>
+                                    <div class="name">Tailwind CSS + Framer Motion</div>
+                                    <div class="desc">스타일/애니메이션</div>
+                                </li>
+                            </ul>
+                        </div>
 
-                    <div class="arch-card gpu">
-                        <h3>
-                            <i data-lucide="cpu" style="width:24px;height:24px;color:var(--pink-400);"></i>
-                            GPU Model Server
-                        </h3>
-                        <div class="subtitle">RTX 4080 · 모든 AI 모델</div>
-                        <ul class="arch-list">
-                            <li>
-                                <div class="icon">👁️</div>
-                                <div class="name">Qwen2-VL</div>
-                                <div class="desc">장면 분석</div>
-                            </li>
-                            <li>
-                                <div class="icon">🧠</div>
-                                <div class="name">EXAONE</div>
-                                <div class="desc">쿼리 파싱</div>
-                            </li>
-                            <li>
-                                <div class="icon">📝</div>
-                                <div class="name">BGE-M3</div>
-                                <div class="desc">텍스트 임베딩 (384차원)</div>
-                            </li>
-                            <li>
-                                <div class="icon">😊</div>
-                                <div class="name">InsightFace (ArcFace)</div>
-                                <div class="desc">얼굴 임베딩 (512차원)</div>
-                            </li>
-                        </ul>
+                        <div style="display: grid; gap: 1.5rem; grid-template-columns: 1fr 1fr;">
+                            <!-- API Server -->
+                            <div class="arch-card api">
+                                <h3>
+                                    🖥️ API Server
+                                </h3>
+                                <div class="subtitle">Mac M1 · Port 9000</div>
+                                <ul class="arch-list">
+                                    <li>
+                                        <div class="icon">🚀</div>
+                                        <div class="name">FastAPI</div>
+                                        <div class="desc">REST API</div>
+                                    </li>
+                                    <li>
+                                        <div class="icon">🗄️</div>
+                                        <div class="name">SQLite + SQLAlchemy</div>
+                                        <div class="desc">데이터 저장</div>
+                                    </li>
+                                    <li>
+                                        <div class="icon">🔍</div>
+                                        <div class="name">FAISS</div>
+                                        <div class="desc">벡터 검색</div>
+                                    </li>
+                                    <li>
+                                        <div class="icon">⚙️</div>
+                                        <div class="name">비즈니스 로직</div>
+                                        <div class="desc">검색/클러스터링</div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- GPU Server -->
+                            <div class="arch-card gpu">
+                                <h3>
+                                    🎮 GPU Model Server
+                                </h3>
+                                <div class="subtitle">RTX 4080 · Port 5000</div>
+                                <ul class="arch-list">
+                                    <li>
+                                        <div class="icon">👁️</div>
+                                        <div class="name">Qwen2-VL</div>
+                                        <div class="desc">장면 분석</div>
+                                    </li>
+                                    <li>
+                                        <div class="icon">🧠</div>
+                                        <div class="name">EXAONE</div>
+                                        <div class="desc">쿼리 파싱</div>
+                                    </li>
+                                    <li>
+                                        <div class="icon">📝</div>
+                                        <div class="name">BGE-M3</div>
+                                        <div class="desc">텍스트 임베딩 (384차원)</div>
+                                    </li>
+                                    <li>
+                                        <div class="icon">😊</div>
+                                        <div class="name">InsightFace (ArcFace)</div>
+                                        <div class="desc">얼굴 임베딩 (512차원)</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -763,8 +789,7 @@
                         <div class="demo-search">
                             <input type="text" class="demo-input" value="설윤 주황색 원피스" readonly>
                             <button class="demo-btn">
-                                <i data-lucide="search" style="width:18px;height:18px;"></i>
-                                검색
+                                🔍 검색
                             </button>
                         </div>
                         <div class="demo-results">
@@ -939,7 +964,7 @@
     <footer>
         <div class="footer-links">
             <a href="https://mine-fan.ngrok.app/admin" target="_blank">
-                <i data-lucide="external-link" style="width:20px;height:20px;"></i>
+                🔗 Live Demo
             </a>
         </div>
         <p class="footer-copy">
