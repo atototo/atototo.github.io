@@ -3,962 +3,525 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mine (마인) | K-POP 멀티모달 시맨틱 검색 플랫폼</title>
-    <meta name="description" content="VLM·LLM·임베딩·얼굴인식 모두 로컬 GPU 직접 운영. '설윤 주황색 원피스' 같은 자연어로 K-POP 영상 검색.">
-    
+    <title>Mine (마인) — K-POP 멀티모달 검색</title>
+    <meta name="description" content="VLM·LLM·임베딩·얼굴인식 모두 로컬 GPU 직접 운영. 자연어로 K-POP 영상 검색.">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: rgba(255,255,255,0.05);
-            --bg-tertiary: rgba(255,255,255,0.02);
-            --text-primary: #f5f5f5;
-            --text-secondary: #a1a1aa;
-            --text-muted: #71717a;
-            --pink-400: #f472b6;
-            --pink-500: #ec4899;
-            --purple-400: #a78bfa;
-            --purple-500: #8b5cf6;
-            --cyan-400: #22d3ee;
-            --cyan-500: #06b6d4;
-            --emerald-400: #34d399;
-            --amber-400: #fbbf24;
-            --blue-400: #60a5fa;
-            --red-400: #f87171;
-            --border-color: rgba(255,255,255,0.1);
+            --bg: #09090B;
+            --bg-elevated: #111113;
+            --bg-hover: #18181B;
+            --border: #27272A;
+            --border-light: #3F3F46;
+            --text: #FAFAFA;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --accent: #10B981;
+            --accent-dim: #065F46;
+            --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'JetBrains Mono', 'Fira Code', monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::selection { background: var(--accent); color: var(--bg); }
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
             line-height: 1.6;
-            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .bg-effects {
-            position: fixed; inset: 0; pointer-events: none; z-index: 0;
-        }
-        .bg-effects::before {
-            content: ''; position: absolute; top: -10%; left: 10%;
-            width: 500px; height: 500px;
-            background: rgba(236, 72, 153, 0.08);
-            border-radius: 50%; filter: blur(120px);
-        }
-        .bg-effects::after {
-            content: ''; position: absolute; bottom: 20%; right: 10%;
-            width: 400px; height: 400px;
-            background: rgba(6, 182, 212, 0.06);
-            border-radius: 50%; filter: blur(120px);
-        }
+        a { color: inherit; text-decoration: none; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
 
+        /* Nav */
         nav {
-            position: fixed; top: 0; width: 100%; z-index: 100;
-            padding: 1rem 1.5rem; transition: all 0.3s ease;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 16px 0;
+            background: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
         }
-        nav.scrolled {
-            background: rgba(10, 10, 15, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
+        nav.scrolled { border-bottom-color: var(--border); }
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .nav-container {
-            max-width: 1200px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
+        .nav-logo {
+            font-weight: 600;
+            font-size: 0.95rem;
         }
-        .logo {
-            display: flex; align-items: center; gap: 0.75rem;
-            text-decoration: none; color: var(--text-primary);
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
         }
-        .logo-icon {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, var(--pink-400), var(--cyan-400));
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 1rem; color: white;
-        }
-        .logo-text { font-weight: 600; font-size: 1.1rem; }
-        .nav-links { display: flex; align-items: center; gap: 2rem; }
-        .nav-links a {
-            color: var(--text-secondary); text-decoration: none;
-            font-size: 0.9rem; transition: color 0.2s;
-        }
-        .nav-links a:hover { color: var(--text-primary); }
-        .nav-btn {
-            display: flex; align-items: center; gap: 0.5rem;
-            padding: 0.5rem 1rem; background: var(--bg-secondary);
-            border: 1px solid var(--border-color); border-radius: 8px;
-            color: var(--text-primary); font-size: 0.875rem;
-            text-decoration: none; transition: all 0.2s;
-        }
-        .nav-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--pink-400); }
-        .nav-btn svg { width: 16px; height: 16px; }
-
-        main { position: relative; z-index: 1; }
-        section { padding: 5rem 1.5rem; }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .nav-links a:hover { color: var(--text); }
 
         /* Hero */
         .hero {
-            min-height: 100vh; display: flex;
-            align-items: center; padding-top: 80px;
+            padding: 140px 0 80px;
+            border-bottom: 1px solid var(--border);
         }
-        .hero-content { text-align: center; max-width: 900px; margin: 0 auto; }
-        .hero-badges {
-            display: flex; justify-content: center; flex-wrap: wrap;
-            gap: 0.75rem; margin-bottom: 2rem;
-        }
-        .badge {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.5rem 1rem; border-radius: 9999px;
-            font-size: 0.875rem; font-weight: 500;
-        }
-        .badge-gpu {
-            background: rgba(244, 114, 182, 0.15);
-            border: 1px solid rgba(244, 114, 182, 0.3);
-            color: var(--pink-400);
-        }
-        .badge-cost {
-            background: rgba(52, 211, 153, 0.15);
-            border: 1px solid rgba(52, 211, 153, 0.3);
-            color: var(--emerald-400);
-        }
-        .badge-time {
-            background: rgba(251, 191, 36, 0.15);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            color: var(--amber-400);
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 6px 12px;
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-radius: 100px;
+            margin-bottom: 24px;
         }
         .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 800; margin-bottom: 1rem;
-            letter-spacing: -0.02em; line-height: 1.1;
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 12px;
         }
-        .hero h1 .gradient {
-            background: linear-gradient(135deg, var(--pink-400), var(--purple-400), var(--cyan-400));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        .hero h1 .accent { color: var(--accent); }
         .hero-subtitle {
-            font-size: 1.5rem; color: var(--text-secondary);
-            margin-bottom: 1.5rem; font-weight: 500;
-        }
-        .hero-example {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            font-family: 'JetBrains Mono', monospace;
             font-size: 1.1rem;
-            color: var(--pink-400);
-            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
         }
         .hero-desc {
-            font-size: 1.1rem; color: var(--text-muted);
-            line-height: 1.8; margin-bottom: 2.5rem; max-width: 700px; margin-left: auto; margin-right: auto;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 560px;
+            margin-bottom: 32px;
         }
-        .hero-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; }
-        .btn-primary {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.875rem 1.75rem;
-            background: linear-gradient(135deg, var(--pink-500), var(--purple-500));
-            color: white; font-weight: 600; border-radius: 12px;
-            text-decoration: none; transition: all 0.2s;
+        .hero-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
         }
-        .btn-primary:hover {
-            box-shadow: 0 10px 40px rgba(236, 72, 153, 0.3);
-            transform: translateY(-2px);
+        .hero-link {
+            font-size: 0.9rem;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            transition: all 0.15s;
         }
-        .btn-primary svg { width: 18px; height: 18px; }
-        .btn-secondary {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.875rem 1.75rem; background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary); font-weight: 500;
-            border-radius: 12px; text-decoration: none; transition: all 0.2s;
+        .hero-link:hover {
+            color: var(--text);
+            border-color: var(--border-light);
+            background: var(--bg-elevated);
         }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--pink-400); }
-        .btn-secondary svg { width: 18px; height: 18px; }
+        .hero-link.primary {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+        .hero-link.primary:hover { opacity: 0.9; }
 
-        /* Section Headers */
-        .section-header { text-align: center; margin-bottom: 4rem; }
-        .section-header h2 { font-size: 2.25rem; font-weight: 700; margin-bottom: 0.75rem; }
-        .section-header h2 .muted { color: var(--text-muted); }
-        .section-header p { color: var(--text-muted); font-size: 1.1rem; }
+        /* Section */
+        section { padding: 80px 0; border-bottom: 1px solid var(--border); }
+        section:last-of-type { border-bottom: none; }
+        .section-label {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            letter-spacing: -0.02em;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        .stat {
+            padding: 20px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        .stat-value {
+            font-family: var(--mono);
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
 
         /* Architecture */
         .arch-grid {
-            display: grid; gap: 2rem;
-        }
-        @media (min-width: 1024px) {
-            .arch-grid { grid-template-columns: 1fr 1fr; }
+            display: grid;
+            gap: 16px;
         }
         .arch-card {
-            padding: 2rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        .arch-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0;
-            height: 3px;
-        }
-        .arch-card.api::before {
-            background: linear-gradient(90deg, var(--cyan-400), var(--blue-400));
-        }
-        .arch-card.gpu::before {
-            background: linear-gradient(90deg, var(--pink-400), var(--purple-400));
+            padding: 24px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
         }
         .arch-card h3 {
-            display: flex; align-items: center; gap: 0.75rem;
-            font-size: 1.25rem; margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
         .arch-card .subtitle {
-            font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
         }
-        .arch-list { list-style: none; }
+        .arch-list {
+            list-style: none;
+        }
         .arch-list li {
-            display: flex; align-items: center; gap: 0.75rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
         }
         .arch-list li:last-child { border-bottom: none; }
-        .arch-list .icon { 
-            width: 32px; height: 32px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem;
+        .arch-list .name { color: var(--text); }
+        .arch-list .desc { color: var(--text-muted); }
+
+        @media (min-width: 768px) {
+            .arch-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
         }
-        .arch-list .name { font-weight: 500; flex: 1; }
-        .arch-list .desc { font-size: 0.8rem; color: var(--text-muted); }
 
         /* Pipeline */
-        .pipeline-section { background: linear-gradient(180deg, transparent, var(--bg-tertiary), transparent); }
         .pipeline {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
+            gap: 8px;
             align-items: center;
         }
         .pipeline-step {
-            display: flex; flex-direction: column;
-            align-items: center; gap: 0.5rem;
-            padding: 1.25rem 1.5rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            min-width: 120px;
-            transition: all 0.2s;
-        }
-        .pipeline-step:hover {
-            border-color: var(--pink-400);
-            transform: translateY(-2px);
-        }
-        .pipeline-step .icon {
-            width: 40px; height: 40px;
-            background: linear-gradient(135deg, var(--pink-400), var(--purple-400));
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
-        }
-        .pipeline-step .label {
-            font-size: 0.85rem; font-weight: 500;
+            padding: 12px 16px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
             text-align: center;
+        }
+        .pipeline-step small {
+            display: block;
+            font-family: var(--mono);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            margin-top: 4px;
         }
         .pipeline-arrow {
-            color: var(--text-muted);
-            font-size: 1.5rem;
-        }
-        @media (max-width: 768px) {
-            .pipeline-arrow { transform: rotate(90deg); }
+            color: var(--accent);
+            font-size: 0.9rem;
         }
 
-        /* Search Strategies */
-        .strategies-grid {
-            display: grid; gap: 1.5rem;
+        /* Strategies */
+        .strategies {
+            display: grid;
+            gap: 16px;
         }
         @media (min-width: 768px) {
-            .strategies-grid { grid-template-columns: repeat(3, 1fr); }
+            .strategies { grid-template-columns: repeat(3, 1fr); }
         }
         .strategy-card {
-            padding: 1.5rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            transition: all 0.2s;
+            padding: 24px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
         }
         .strategy-card:hover {
-            border-color: var(--pink-400);
-            transform: translateY(-2px);
+            border-color: var(--border-light);
         }
-        .strategy-card .tag {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: rgba(244, 114, 182, 0.1);
-            border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--pink-400);
-            margin-bottom: 0.75rem;
+        .strategy-tag {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--accent);
+            margin-bottom: 12px;
         }
         .strategy-card h4 {
-            font-size: 1rem; margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
         .strategy-card p {
-            font-size: 0.875rem; color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-        .strategy-card .example {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--cyan-400);
-            background: rgba(0,0,0,0.3);
-            padding: 0.5rem 0.75rem;
-            border-radius: 6px;
-        }
-
-        /* Demo Section */
-        .demo-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            overflow: hidden;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .demo-header {
-            display: flex; align-items: center; gap: 0.5rem;
-            padding: 1rem 1.5rem;
-            background: rgba(0,0,0,0.3);
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.875rem; color: var(--text-muted);
-        }
-        .demo-header .dots {
-            display: flex; gap: 6px; margin-right: 1rem;
-        }
-        .demo-header .dot {
-            width: 12px; height: 12px; border-radius: 50%;
-        }
-        .demo-header .dot.red { background: #ff5f56; }
-        .demo-header .dot.yellow { background: #ffbd2e; }
-        .demo-header .dot.green { background: #27ca40; }
-        .demo-content {
-            padding: 2rem;
-        }
-        .demo-search {
-            display: flex; gap: 1rem; margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        .demo-input {
-            flex: 1; min-width: 250px;
-            padding: 1rem 1.25rem;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-family: inherit;
-        }
-        .demo-input::placeholder { color: var(--text-muted); }
-        .demo-btn {
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, var(--pink-500), var(--purple-500));
-            border: none; border-radius: 12px;
-            color: white; font-weight: 600;
-            cursor: pointer;
-            display: flex; align-items: center; gap: 0.5rem;
-        }
-        .demo-results {
-            display: grid; gap: 1rem;
-        }
-        @media (min-width: 640px) {
-            .demo-results { grid-template-columns: repeat(3, 1fr); }
-        }
-        .demo-result {
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .demo-result-img {
-            width: 100%; aspect-ratio: 16/9;
-            background: linear-gradient(135deg, var(--pink-400), var(--purple-400));
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2rem;
-        }
-        .demo-result-info {
-            padding: 0.75rem;
-        }
-        .demo-result-info .title {
-            font-size: 0.85rem; font-weight: 500;
-            margin-bottom: 0.25rem;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .demo-result-info .meta {
-            display: flex; justify-content: space-between;
-            font-size: 0.75rem; color: var(--text-muted);
-        }
-        .demo-result-info .score { color: var(--emerald-400); }
-
-        /* Tech Stack */
-        .tech-grid {
-            display: grid; gap: 1.5rem;
-        }
-        @media (min-width: 768px) {
-            .tech-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (min-width: 1024px) {
-            .tech-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-        .tech-card {
-            padding: 1.5rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-        }
-        .tech-card h3 {
-            display: flex; align-items: center; gap: 0.5rem;
-            font-size: 1rem; margin-bottom: 1rem;
-        }
-        .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .tech-tag {
-            padding: 0.375rem 0.75rem;
-            background: rgba(255,255,255,0.05);
-            border-radius: 6px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
         }
-
-        /* Features */
-        .features-grid {
-            display: grid; gap: 1.5rem;
-        }
-        @media (min-width: 768px) {
-            .features-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        .feature-card {
-            padding: 2rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-        }
-        .feature-card h4 {
-            display: flex; align-items: center; gap: 0.75rem;
-            font-size: 1.1rem; margin-bottom: 1rem;
-        }
-        .feature-card h4 .icon {
-            width: 40px; height: 40px;
-            background: linear-gradient(135deg, var(--pink-400), var(--purple-400));
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .feature-card p {
-            font-size: 0.95rem; color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        /* Achievement */
-        .achievement-card {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 3rem;
-            background: linear-gradient(135deg, var(--bg-secondary), rgba(244, 114, 182, 0.05));
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            text-align: center;
-        }
-        .achievement-card h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        .achievement-card > p {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-        .achievement-stats {
-            display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem;
-        }
-        .achievement-stat {
-            text-align: center;
-        }
-        .achievement-stat .value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--pink-400);
-        }
-        .achievement-stat .label {
-            font-size: 0.875rem;
+        .strategy-example {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            padding: 10px 12px;
+            background: var(--bg);
+            border-radius: 6px;
             color: var(--text-muted);
+        }
+
+        /* Tech */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+        .tech-group h3 {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+        .tech-group ul {
+            list-style: none;
+        }
+        .tech-group li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
         }
 
         /* Footer */
         footer {
-            padding: 3rem 1.5rem;
-            border-top: 1px solid var(--border-color);
-            text-align: center;
+            padding: 24px 0;
+            border-top: 1px solid var(--border);
         }
-        .footer-links {
-            display: flex; justify-content: center; gap: 2rem;
-            margin-bottom: 1.5rem;
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s;
+        .back-link {
+            color: var(--text-muted);
+            transition: color 0.15s;
         }
-        .footer-links a:hover { color: var(--pink-400); }
-        .footer-copy { font-size: 0.875rem; color: var(--text-muted); }
-
-        /* Animations */
-        .fade-in { opacity: 1; transform: translateY(0); transition: all 0.6s ease; }
-        .fade-in.hidden { opacity: 0; transform: translateY(20px); }
+        .back-link:hover { color: var(--accent); }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .tech-grid { grid-template-columns: repeat(2, 1fr); }
+            .pipeline-arrow { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-effects"></div>
-
-    <nav id="navbar">
-        <div class="nav-container">
-            <a href="../" class="logo">
-                <div class="logo-icon">M</div>
-                <span class="logo-text">Mine</span>
-            </a>
-            <div class="nav-links">
-                <a href="#architecture">아키텍처</a>
-                <a href="#search">검색</a>
-                <a href="#tech">기술</a>
-                <a href="https://mine-fan.ngrok.app" target="_blank" class="nav-btn">
-                    🎵 팬 모드 데모
-                </a>
+    <nav id="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="../" class="nav-logo">이영은</a>
+                <div class="nav-links">
+                    <a href="#architecture">Architecture</a>
+                    <a href="#search">Search</a>
+                    <a href="#tech">Tech</a>
+                </div>
             </div>
         </div>
     </nav>
 
     <main>
-        <!-- Hero -->
         <section class="hero">
             <div class="container">
-                <div class="hero-content">
-                    <div class="hero-badges">
-                        <span class="badge badge-gpu">
-                            🖥️ 로컬 GPU 운영
-                        </span>
-                        <span class="badge badge-cost">
-                            💰 API 비용 0원
-                        </span>
-                        <span class="badge badge-time">
-                            ⚡ ~20시간 MVP
-                        </span>
+                <span class="hero-badge">Live Project</span>
+                <h1>Mine <span class="accent">(마인)</span></h1>
+                <p class="hero-subtitle">K-POP 멀티모달 시맨틱 검색</p>
+                <p class="hero-desc">
+                    VLM, LLM, 임베딩, 얼굴인식 모두 로컬 GPU에서 직접 운영.
+                    "설윤 주황색 원피스" 같은 자연어로 K-POP 영상 속 장면을 검색합니다.
+                    API 비용 0원, 약 20시간 MVP.
+                </p>
+                <div class="hero-links">
+                    <a href="https://mine-fan.ngrok.app" target="_blank" class="hero-link primary">팬 모드 데모</a>
+                    <a href="https://mine-fan.ngrok.app/admin" target="_blank" class="hero-link">운영 모드 데모</a>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">로컬 GPU 운영</div>
                     </div>
-
-                    <h1>
-                        <span class="gradient">Mine (마인)</span>
-                    </h1>
-                    
-                    <p class="hero-subtitle">
-                        K-POP 멀티모달 시맨틱 검색 플랫폼
-                    </p>
-
-                    <div class="hero-example">
-                        "설윤 주황색 원피스"
+                    <div class="stat">
+                        <div class="stat-value">멀티모달</div>
+                        <div class="stat-label">영상 + 텍스트 + 얼굴</div>
                     </div>
-                    
-                    <p class="hero-desc">
-                        VLM·LLM·임베딩·얼굴인식 모두 로컬 GPU에서 직접 운영.<br>
-                        태그나 메타데이터 없이 자연어로 K-POP 영상 속 원하는 장면을 찾습니다.
-                    </p>
-
-                    <div class="hero-buttons">
-                        <a href="https://mine-fan.ngrok.app" target="_blank" class="btn-primary">
-                            🎵 팬 모드 데모
-                        </a>
-                        <a href="https://mine-fan.ngrok.app/admin" target="_blank" class="btn-secondary">
-                            ⚙️ 운영 모드 데모
-                        </a>
+                    <div class="stat">
+                        <div class="stat-value">자연어</div>
+                        <div class="stat-label">시맨틱 검색</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">~20h</div>
+                        <div class="stat-label">풀스택 MVP</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Architecture -->
-        <section id="architecture" class="fade-in">
+        <section id="architecture">
             <div class="container">
-                <div class="section-header">
-                    <h2><span class="muted">3-Tier</span> 분산 아키텍처</h2>
-                    <p>하드웨어 특성에 맞춘 분산 구조 — 클라우드 API 비용 0원</p>
+                <div class="section-label">Architecture</div>
+                <h2 class="section-title">3-Tier 분산 아키텍처</h2>
+
+                <div class="arch-grid">
+                    <div class="arch-card">
+                        <h3>Frontend</h3>
+                        <div class="subtitle">Next.js 16</div>
+                        <ul class="arch-list">
+                            <li><span class="name">React 19 + TypeScript</span><span class="desc">UI</span></li>
+                            <li><span class="name">HLS.js</span><span class="desc">영상 스트리밍</span></li>
+                            <li><span class="name">Tailwind + Framer Motion</span><span class="desc">스타일</span></li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="arch-grid" style="grid-template-columns: 1fr;">
-                    <div style="display: grid; gap: 1.5rem;">
-                        <!-- Frontend -->
-                        <div class="arch-card" style="border-top: 3px solid var(--emerald-400);">
-                            <h3>
-                                🖥️ Frontend
-                            </h3>
-                            <div class="subtitle">Next.js 16</div>
-                            <ul class="arch-list">
-                                <li>
-                                    <div class="icon">⚛️</div>
-                                    <div class="name">React 19 + TypeScript</div>
-                                    <div class="desc">UI</div>
-                                </li>
-                                <li>
-                                    <div class="icon">🎬</div>
-                                    <div class="name">HLS.js</div>
-                                    <div class="desc">영상 스트리밍</div>
-                                </li>
-                                <li>
-                                    <div class="icon">🎨</div>
-                                    <div class="name">Tailwind CSS + Framer Motion</div>
-                                    <div class="desc">스타일/애니메이션</div>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div style="display: grid; gap: 1.5rem; grid-template-columns: 1fr 1fr;">
-                            <!-- API Server -->
-                            <div class="arch-card api">
-                                <h3>
-                                    🖥️ API Server
-                                </h3>
-                                <div class="subtitle">Mac M1</div>
-                                <ul class="arch-list">
-                                    <li>
-                                        <div class="icon">🚀</div>
-                                        <div class="name">FastAPI</div>
-                                        <div class="desc">REST API</div>
-                                    </li>
-                                    <li>
-                                        <div class="icon">🗄️</div>
-                                        <div class="name">SQLite + SQLAlchemy</div>
-                                        <div class="desc">데이터 저장</div>
-                                    </li>
-                                    <li>
-                                        <div class="icon">🔍</div>
-                                        <div class="name">FAISS</div>
-                                        <div class="desc">벡터 검색</div>
-                                    </li>
-                                    <li>
-                                        <div class="icon">⚙️</div>
-                                        <div class="name">비즈니스 로직</div>
-                                        <div class="desc">검색/클러스터링</div>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- GPU Server -->
-                            <div class="arch-card gpu">
-                                <h3>
-                                    🎮 GPU Model Server
-                                </h3>
-                                <div class="subtitle">RTX 4080</div>
-                                <ul class="arch-list">
-                                    <li>
-                                        <div class="icon">👁️</div>
-                                        <div class="name">Qwen3-VL</div>
-                                        <div class="desc">장면 분석</div>
-                                    </li>
-                                    <li>
-                                        <div class="icon">🧠</div>
-                                        <div class="name">EXAONE</div>
-                                        <div class="desc">쿼리 파싱</div>
-                                    </li>
-                                    <li>
-                                        <div class="icon">📝</div>
-                                        <div class="name">BGE-M3</div>
-                                        <div class="desc">텍스트 임베딩 (384차원)</div>
-                                    </li>
-                                    <li>
-                                        <div class="icon">😊</div>
-                                        <div class="name">InsightFace (ArcFace)</div>
-                                        <div class="desc">얼굴 임베딩 (512차원)</div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                <div class="arch-grid cols-2" style="margin-top: 16px;">
+                    <div class="arch-card">
+                        <h3>API Server</h3>
+                        <div class="subtitle">Mac M1</div>
+                        <ul class="arch-list">
+                            <li><span class="name">FastAPI</span><span class="desc">REST API</span></li>
+                            <li><span class="name">SQLite + SQLAlchemy</span><span class="desc">저장</span></li>
+                            <li><span class="name">FAISS</span><span class="desc">벡터 검색</span></li>
+                        </ul>
+                    </div>
+                    <div class="arch-card">
+                        <h3>GPU Model Server</h3>
+                        <div class="subtitle">RTX 4080</div>
+                        <ul class="arch-list">
+                            <li><span class="name">Qwen3-VL</span><span class="desc">장면 분석</span></li>
+                            <li><span class="name">EXAONE</span><span class="desc">쿼리 파싱</span></li>
+                            <li><span class="name">BGE-M3</span><span class="desc">텍스트 임베딩</span></li>
+                            <li><span class="name">InsightFace</span><span class="desc">얼굴 임베딩</span></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Pipeline -->
-        <section class="pipeline-section fade-in">
+        <section>
             <div class="container">
-                <div class="section-header">
-                    <h2><span class="muted">영상 처리</span> 파이프라인</h2>
-                    <p>영상 등록부터 검색 가능 상태까지 완전 자동화</p>
-                </div>
-
+                <div class="section-label">Pipeline</div>
+                <h2 class="section-title">영상 처리 파이프라인</h2>
                 <div class="pipeline">
-                    <div class="pipeline-step">
-                        <div class="icon">📺</div>
-                        <div class="label">영상 등록<br><small style="color:var(--text-muted)">YouTube/로컬</small></div>
-                    </div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step">
-                        <div class="icon">🎬</div>
-                        <div class="label">프레임 추출<br><small style="color:var(--text-muted)">1초 간격</small></div>
-                    </div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step">
-                        <div class="icon">😊</div>
-                        <div class="label">얼굴 검출<br><small style="color:var(--text-muted)">InsightFace</small></div>
-                    </div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step">
-                        <div class="icon">👥</div>
-                        <div class="label">클러스터링<br><small style="color:var(--text-muted)">DBSCAN</small></div>
-                    </div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step">
-                        <div class="icon">👁️</div>
-                        <div class="label">장면 분석<br><small style="color:var(--text-muted)">VLM</small></div>
-                    </div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step">
-                        <div class="icon">🔍</div>
-                        <div class="label">인덱싱<br><small style="color:var(--text-muted)">FAISS</small></div>
-                    </div>
+                    <div class="pipeline-step">영상 등록<small>YouTube/로컬</small></div>
+                    <span class="pipeline-arrow">→</span>
+                    <div class="pipeline-step">프레임 추출<small>1초 간격</small></div>
+                    <span class="pipeline-arrow">→</span>
+                    <div class="pipeline-step">얼굴 검출<small>InsightFace</small></div>
+                    <span class="pipeline-arrow">→</span>
+                    <div class="pipeline-step">클러스터링<small>DBSCAN</small></div>
+                    <span class="pipeline-arrow">→</span>
+                    <div class="pipeline-step">장면 분석<small>VLM</small></div>
+                    <span class="pipeline-arrow">→</span>
+                    <div class="pipeline-step">인덱싱<small>FAISS</small></div>
                 </div>
             </div>
         </section>
 
-        <!-- Search Strategies -->
-        <section id="search" class="fade-in">
+        <section id="search">
             <div class="container">
-                <div class="section-header">
-                    <h2><span class="muted">3가지</span> 검색 전략</h2>
-                    <p>LLM이 쿼리를 분석해서 자동으로 최적 전략 선택</p>
-                </div>
+                <div class="section-label">Search Strategy</div>
+                <h2 class="section-title">3가지 검색 전략</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 32px; font-size: 0.95rem;">
+                    LLM이 쿼리를 분석해서 자동으로 최적 전략 선택
+                </p>
 
-                <div class="strategies-grid">
+                <div class="strategies">
                     <div class="strategy-card">
-                        <div class="tag">PERSON_ONLY</div>
+                        <div class="strategy-tag">PERSON_ONLY</div>
                         <h4>인물 기반 검색</h4>
-                        <p>인물명만 있을 때 → DB 직접 조회로 해당 인물 등장 장면 반환</p>
-                        <div class="example">"설윤"</div>
+                        <p>인물명만 있을 때 DB 직접 조회</p>
+                        <div class="strategy-example">"설윤"</div>
                     </div>
                     <div class="strategy-card">
-                        <div class="tag">DESC_ONLY</div>
+                        <div class="strategy-tag">DESC_ONLY</div>
                         <h4>설명 기반 검색</h4>
-                        <p>행동/상황만 있을 때 → FAISS 벡터 유사도 검색</p>
-                        <div class="example">"주황색 원피스 입고 춤추는"</div>
+                        <p>행동/상황만 있을 때 벡터 유사도 검색</p>
+                        <div class="strategy-example">"주황색 원피스 입고 춤추는"</div>
                     </div>
                     <div class="strategy-card">
-                        <div class="tag">HYBRID</div>
+                        <div class="strategy-tag">HYBRID</div>
                         <h4>하이브리드 검색</h4>
-                        <p>인물 + 설명 → DB 필터 후 벡터 유사도 정렬</p>
-                        <div class="example">"설윤 주황색 원피스"</div>
+                        <p>인물 + 설명 → DB 필터 후 벡터 정렬</p>
+                        <div class="strategy-example">"설윤 주황색 원피스"</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Demo UI -->
-        <section class="fade-in" style="background: linear-gradient(180deg, transparent, var(--bg-tertiary), transparent);">
+        <section id="tech">
             <div class="container">
-                <div class="section-header">
-                    <h2><span class="muted">검색</span> 인터페이스</h2>
-                    <p>자연어로 K-POP 영상 속 장면을 검색</p>
-                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
-                        <a href="https://mine-fan.ngrok.app" target="_blank" style="padding: 0.5rem 1rem; background: linear-gradient(135deg, var(--pink-500), var(--purple-500)); color: white; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">🎵 팬 모드 데모</a>
-                        <a href="https://mine-fan.ngrok.app/admin" target="_blank" style="padding: 0.5rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; text-decoration: none; font-size: 0.9rem;">⚙️ 운영 모드 데모</a>
-                    </div>
-                </div>
-
-                <div class="demo-card">
-                    <div class="demo-header">
-                        <div class="dots">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                        </div>
-                        Mine — 팬 모드
-                    </div>
-                    <div class="demo-content">
-                        <div class="demo-search">
-                            <input type="text" class="demo-input" value="설윤 주황색 원피스" readonly>
-                            <button class="demo-btn">
-                                🔍 검색
-                            </button>
-                        </div>
-                        <div class="demo-results">
-                            <div class="demo-result">
-                                <div class="demo-result-img">🎬</div>
-                                <div class="demo-result-info">
-                                    <div class="title">NMIXX "See that?" MV</div>
-                                    <div class="meta">
-                                        <span>02:34</span>
-                                        <span class="score">92.3%</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="demo-result">
-                                <div class="demo-result-img">🎬</div>
-                                <div class="demo-result-info">
-                                    <div class="title">NMIXX Performance</div>
-                                    <div class="meta">
-                                        <span>01:47</span>
-                                        <span class="score">89.1%</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="demo-result">
-                                <div class="demo-result-img">🎬</div>
-                                <div class="demo-result-info">
-                                    <div class="title">NMIXX Fancam</div>
-                                    <div class="meta">
-                                        <span>03:12</span>
-                                        <span class="score">85.7%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features -->
-        <section class="fade-in">
-            <div class="container">
-                <div class="section-header">
-                    <h2><span class="muted">핵심</span> 기능</h2>
-                    <p>K-POP 팬을 위한 시맨틱 검색 플랫폼</p>
-                </div>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h4>
-                            <div class="icon">😊</div>
-                            자동 인물 클러스터링
-                        </h4>
-                        <p>
-                            DBSCAN으로 초기 클러스터링 후, 코사인 유사도로 Known Person과 매칭.
-                            유사도 0.6 이상은 자동 병합, 0.4~0.6은 매칭 제안으로 사용자 확인.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>
-                            <div class="icon">👁️</div>
-                            VLM 장면 분석
-                        </h4>
-                        <p>
-                            Qwen3-VL이 각 프레임을 분석해서 "설윤이 춤을 추고 있다" 같은 텍스트 생성.
-                            BGE-M3로 384차원 벡터로 변환 후 FAISS 인덱싱.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>
-                            <div class="icon">🧠</div>
-                            LLM 쿼리 파싱
-                        </h4>
-                        <p>
-                            EXAONE이 자연어 쿼리를 분석해서 인물명(identity)과 행동 설명(description) 자동 분리.
-                            다중 인물 검색도 지원.
-                        </p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>
-                            <div class="icon">📺</div>
-                            영상 관리
-                        </h4>
-                        <p>
-                            YouTube URL 입력 또는 로컬 파일 업로드로 영상 등록.
-                            yt-dlp로 메타데이터 추출, ffmpeg로 HLS 스트리밍 변환.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Tech Stack -->
-        <section id="tech" class="fade-in" style="background: linear-gradient(180deg, transparent, var(--bg-tertiary), transparent);">
-            <div class="container">
-                <div class="section-header">
-                    <h2><span class="muted">Tech</span> Stack</h2>
-                    <p>풀스택 + ML 파이프라인</p>
-                </div>
-
+                <div class="section-label">Tech Stack</div>
+                <h2 class="section-title">기술 스택</h2>
                 <div class="tech-grid">
-                    <div class="tech-card">
-                        <h3><span style="color: var(--cyan-400);">🔷</span> Backend</h3>
-                        <div class="tech-tags">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">FastAPI</span>
-                            <span class="tech-tag">SQLAlchemy</span>
-                            <span class="tech-tag">Pydantic</span>
-                        </div>
+                    <div class="tech-group">
+                        <h3>Backend</h3>
+                        <ul>
+                            <li>Python</li>
+                            <li>FastAPI</li>
+                            <li>SQLAlchemy</li>
+                            <li>Pydantic</li>
+                        </ul>
                     </div>
-                    <div class="tech-card">
-                        <h3><span style="color: var(--pink-400);">⚛️</span> Frontend</h3>
-                        <div class="tech-tags">
-                            <span class="tech-tag">Next.js 16</span>
-                            <span class="tech-tag">React 19</span>
-                            <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag">Tailwind CSS</span>
-                        </div>
+                    <div class="tech-group">
+                        <h3>Frontend</h3>
+                        <ul>
+                            <li>Next.js 16</li>
+                            <li>React 19</li>
+                            <li>TypeScript</li>
+                            <li>Tailwind CSS</li>
+                        </ul>
                     </div>
-                    <div class="tech-card">
-                        <h3><span style="color: var(--purple-400);">🧠</span> AI Models</h3>
-                        <div class="tech-tags">
-                            <span class="tech-tag">Qwen3-VL</span>
-                            <span class="tech-tag">EXAONE</span>
-                            <span class="tech-tag">BGE-M3</span>
-                            <span class="tech-tag">InsightFace</span>
-                        </div>
+                    <div class="tech-group">
+                        <h3>AI Models</h3>
+                        <ul>
+                            <li>Qwen3-VL</li>
+                            <li>EXAONE</li>
+                            <li>BGE-M3</li>
+                            <li>InsightFace</li>
+                        </ul>
                     </div>
-                    <div class="tech-card">
-                        <h3><span style="color: var(--emerald-400);">🗄️</span> Data</h3>
-                        <div class="tech-tags">
-                            <span class="tech-tag">SQLite</span>
-                            <span class="tech-tag">FAISS</span>
-                            <span class="tech-tag">PyTorch</span>
-                            <span class="tech-tag">ONNX Runtime</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Achievement -->
-        <section class="fade-in">
-            <div class="container">
-                <div class="achievement-card">
-                    <h2>🎯 프로젝트 성과</h2>
-                    <p>재직 중 여가 시간 활용, ~20시간 내 MVP 구현</p>
-                    
-                    <div class="achievement-stats">
-                        <div class="achievement-stat">
-                            <div class="value">4개</div>
-                            <div class="label">AI 모델 로컬 운영</div>
-                        </div>
-                        <div class="achievement-stat">
-                            <div class="value">0원</div>
-                            <div class="label">클라우드 API 비용</div>
-                        </div>
-                        <div class="achievement-stat">
-                            <div class="value">3가지</div>
-                            <div class="label">검색 전략</div>
-                        </div>
-                        <div class="achievement-stat">
-                            <div class="value">~20h</div>
-                            <div class="label">MVP 개발</div>
-                        </div>
+                    <div class="tech-group">
+                        <h3>Data</h3>
+                        <ul>
+                            <li>SQLite</li>
+                            <li>FAISS</li>
+                            <li>PyTorch</li>
+                            <li>ONNX Runtime</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -966,57 +529,19 @@
     </main>
 
     <footer>
-        <div class="footer-links">
-            <a href="https://mine-fan.ngrok.app" target="_blank">
-                🎵 팬 모드 데모
-            </a>
-            <a href="https://mine-fan.ngrok.app/admin" target="_blank">
-                ⚙️ 운영 모드 데모
-            </a>
+        <div class="container">
+            <div class="footer-inner">
+                <a href="../" class="back-link">← 메인으로</a>
+                <span>2025.12</span>
+            </div>
         </div>
-        <p class="footer-copy">
-            © 2025 이영은 · Mine (마인) · K-POP 멀티모달 검색
-        </p>
-        <p style="margin-top: 1rem;">
-            <a href="../" style="color: var(--pink-400); text-decoration: none;">← 메인 포트폴리오로 돌아가기</a>
-        </p>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-
-            window.addEventListener('scroll', function() {
-                var navbar = document.getElementById('navbar');
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-
-            var observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
-            var observer = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.remove('hidden');
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.fade-in').forEach(function(el) {
-                el.classList.add('hidden');
-                observer.observe(el);
-            });
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 10);
         });
-
-        setTimeout(function() {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        }, 500);
     </script>
 </body>
 </html>
