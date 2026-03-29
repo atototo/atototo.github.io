@@ -240,10 +240,60 @@
             background: var(--bg-elevated);
             color: var(--text-secondary);
         }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .preview-card {
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(17, 17, 19, 0.96), rgba(10, 16, 28, 0.96));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+        .preview-image {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+            background: #0c1220;
+        }
+        .preview-body {
+            padding: 1.25rem;
+        }
+        .preview-eyebrow {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .preview-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.55rem;
+        }
+        .preview-body p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .preview-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.82rem;
+            color: var(--text);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .preview-link:hover {
+            border-color: var(--text-secondary);
+        }
 
         @media (max-width: 900px) {
             .grid-2,
-            .stats-row {
+            .stats-row,
+            .preview-grid {
                 grid-template-columns: 1fr 1fr;
             }
         }
@@ -253,7 +303,8 @@
             main { padding: 0 1rem; }
             .nav-links { display: none; }
             .grid-2,
-            .stats-row {
+            .stats-row,
+            .preview-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -289,6 +340,7 @@
             </p>
             <div class="hero-actions">
                 <a class="btn btn-primary" href="https://github.com/atototo/baton">GitHub ↗</a>
+                <a class="btn btn-secondary" href="https://atototo.github.io/baton/ko/start/what-is-baton">가이드 문서 ↗</a>
                 <a class="btn btn-secondary" href="../index.html#projects">프로젝트 목록</a>
             </div>
 
@@ -365,6 +417,38 @@
         <section>
             <div class="section-header">
                 <div class="section-number">03</div>
+                <h2 class="section-title">문서와 화면</h2>
+                <p class="section-subtitle">실제 제품 화면과 가이드 문서까지 함께 정리했습니다.</p>
+            </div>
+            <div class="preview-grid">
+                <article class="preview-card">
+                    <img class="preview-image" src="https://atototo.github.io/baton/img/screenshots/dashboard.png" alt="Baton 대시보드 스크린샷">
+                    <div class="preview-body">
+                        <div class="preview-eyebrow">Dashboard Guide</div>
+                        <h3 class="preview-title">대시보드 화면과 운영 지표</h3>
+                        <p>
+                            보드 운영자가 에이전트 상태, 이슈 압력, 예산 소진을 한 화면에서 읽을 수 있도록 정리한 대시보드 문서입니다.
+                        </p>
+                        <a class="preview-link" href="https://atototo.github.io/baton/ko/guides/board-operator/dashboard">대시보드 문서 보기 ↗</a>
+                    </div>
+                </article>
+                <article class="preview-card">
+                    <img class="preview-image" src="https://atototo.github.io/baton/img/screenshots/inbox.png" alt="Baton 인박스 및 승인 화면 스크린샷">
+                    <div class="preview-body">
+                        <div class="preview-eyebrow">Concept Guide</div>
+                        <h3 class="preview-title">Baton 개념과 운영 흐름</h3>
+                        <p>
+                            Baton이 왜 단순 태스크 보드가 아니라 control plane에 가까운지, 승인과 실행 흐름을 어떻게 다루는지 설명한 시작 문서입니다.
+                        </p>
+                        <a class="preview-link" href="https://atototo.github.io/baton/ko/start/what-is-baton">Baton 소개 문서 보기 ↗</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <div class="section-number">04</div>
                 <h2 class="section-title">기술 스택</h2>
                 <p class="section-subtitle">백엔드와 UI를 함께 다루며 운영 흐름을 제품으로 연결했습니다.</p>
             </div>
